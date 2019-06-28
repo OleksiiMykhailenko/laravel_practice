@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Book;
 
+use DB;
+
 class BookController extends Controller
 {
     /**
@@ -15,7 +17,7 @@ class BookController extends Controller
      */
     public function index()
     {
-        $books = Book::all();
+        $books = DB::table('books')->paginate(2);
         return view('pages.list', compact('books'));
     }
 
@@ -71,7 +73,7 @@ class BookController extends Controller
      */
     public function edit($id)
     {
-        $book = Book::findOrFail($id);
+        $book = Book::find($id);
         return view('pages.edit', compact('book'));
     }
 
@@ -84,14 +86,19 @@ class BookController extends Controller
      */
     public function update(Request $request, $id)
     {
-        /**$this->validate(request(), [
+        $this->validate($request, [
            'title' => 'required',
            'author' => 'required',
-           'isbn' => 'required'
+           'isbn' => 'required|unique:books'
         ]);
-        $id->update(array('title', 'author', 'isbn'));
+
+        $book = Book::find($id);
+        $book->title = $request->title;
+        $book->author = $request->author;
+        $book->isbn = $request->isbn;
+        $book->save();
+
         return redirect()->to('/books');
-         */
     }
 
     /**
@@ -102,6 +109,8 @@ class BookController extends Controller
      */
     public function destroy($id)
     {
-
+        $book = Book::find($id);
+        $book->delete();
+        return redirect()->to('/books');
     }
 }

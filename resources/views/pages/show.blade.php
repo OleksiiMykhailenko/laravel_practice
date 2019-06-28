@@ -10,8 +10,8 @@
                 <h5 class="card-title">{{$book->title}}</h5>
                 <p class="card-text">{{$book->author}}</p>
                 <p class="card-text">{{$book->isbn}}</p>
-                <p><a href="/pages{{$book->id}}" class="btn btn-dark">Edit</a></p>
-                <button href="" type="submit" class="btn btn-dark">Delete</button>
+                <p><a href="{{ route('edit_book', ['id' => $book->id])}}" class="btn btn-dark">Edit</a></p>
+                <p><a href="{{ route('delete_book', ['id' => $book->id])}}" class="btn btn-dark">Delete</a></p>
             </div>
         </form>
     </div>
